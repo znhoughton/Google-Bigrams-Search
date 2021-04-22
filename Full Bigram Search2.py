@@ -2,7 +2,7 @@
 #download the wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#zs for whichever version of windows you have
 #then use pip install "file location of the wheel without the quotes"
 
-###POS Unspecified was used for the staub replication
+###huge thanks to Lily Houghton and Mariana Dematte for helping me optimize this and troubleshoot
 
 if __name__ == '__main__':
 
