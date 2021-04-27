@@ -2,10 +2,6 @@
 #download the wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#zs for whichever version of windows you have
 #then use pip install "file location of the wheel without the quotes"
 
-#test test
-###
-
-##another test
 
 from zs import ZS
 import math
