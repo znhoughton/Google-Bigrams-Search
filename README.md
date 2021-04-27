@@ -6,7 +6,7 @@ The various python scripts in this repository are designed to make corpus resear
 
 A short summary describing each program is included below:
 
-**2Gram Odds Ratio Manual Input:**
+**2Gram Odds Ratio Manual Input**
 
     You can use this script to manually input two words (bigram) and receive their match counts, volume counts, and odd ratio (how predictive of N2 is N1). The script should be  easy enough to modify for similar purposes.
 
