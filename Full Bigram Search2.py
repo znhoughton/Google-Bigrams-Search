@@ -2,6 +2,7 @@
 #download the wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#zs for whichever version of windows you have
 #then use pip install "file location of the wheel without the quotes"
 
+###POS Unspecified was used for the staub replication
 ###huge thanks to Lily Houghton and Mariana Dematte for helping me optimize this and troubleshoot
 
 if __name__ == '__main__':
@@ -12,22 +13,51 @@ if __name__ == '__main__':
    
 
     
-    z = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-2gram.zs")
-    z_1gram = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-1gram.zs")
-
-    corpus_size = 0
-    for item in z_1gram.search():
-       corpus_size += 1
-    
+    z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs")
+    z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs")
 
     if __name__ == '__main__':
         with open('D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\csvtest.csv', newline='') as csvfile_input:
-            with open('D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\Full Bigram.csv', 'w') as csvfile_output:
+            with open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w') as csvfile_output:
                 bigram_writer = csv.writer(csvfile_output, delimiter=',', lineterminator='\n')
                 bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N2 Volume Count", "N2 Match Count", "N2 Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
                 
+                corpus_size = 0
                 onegram_memory = {}
                 bigram_memory = {}
+                for i, item in enumerate (z_1gram.search()):
+
+                    one_gram_string = item.decode('utf-8')
+                    one_gram_output = one_gram_string.split('\t')
+                    one_gram_match_count = one_gram_output[2]
+                    one_gram_volume_count = one_gram_output[3]
+                    word = one_gram_output[0]
+                    word = word.lower()
+                    
+
+                    if i % 10000000 == 0:
+                        print(one_gram_string)
+                        print(word)
+                        print(len(onegram_memory))
+
+                    if len(word.split('_')) == 2:
+                        word, POS = word.split('_')
+
+                    else:
+                        word = word
+
+                    if word.isalpha():
+                        corpus_size = corpus_size + int(one_gram_match_count) #corpus size is a summation of all the match counts of all the words
+                        if i % 1000000 == 0:
+                            print(word)
+                            print(corpus_size)
+                        
+                        if word in onegram_memory:
+                            old_n1_match, old_n1_volume, old_POS = onegram_memory[word]
+                            onegram_memory[word] = old_n1_match + one_gram_match_count, old_n1_volume + one_gram_volume_count, POS
+                        else:
+                             onegram_memory[word] = one_gram_match_count, one_gram_volume_count, POS   
+
                 for i, item in enumerate (z.search()):
                     decoded_string = item.decode('utf-8')
                     output = decoded_string.split('\t')
@@ -38,6 +68,7 @@ if __name__ == '__main__':
                     if i % 10000000 == 0:
                         print(decoded_string)
                         print(bigram)
+                        print(len(bigram_memory))
                     
                     if len(bigram[0].split('_')) == 2:
                         word1, word1POS = bigram[0].split('_')
@@ -53,7 +84,7 @@ if __name__ == '__main__':
                     word2 = word2.lower()
 
                     if word1.isalpha() and word2.isalpha():
-                        if i % 10000 == 0:
+                        if i % 1000000 == 0:
                             print(word1 + " " + word2)
                         if (word1, word2) in bigram_memory:
                             old_output2, old_output3, old_POS1, old_POS2, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3 = bigram_memory[(word1, word2)]
@@ -63,97 +94,18 @@ if __name__ == '__main__':
                         else:
                             if word1 not in onegram_memory:
 
-                                n1_match = 0
-                                n1_volume = 0
-
-                                word1_capital = word1.capitalize() #search query doesn't let us ignore case, so we have to account for each combination of capital and lowercase in English
-                                
-                                word1_encoded = word1.encode('utf-8')
-                                word1_capital = word1_capital.encode('utf-8')
-                                
-
-                                for record in z_1gram.search(prefix=word1_encoded): #number of times word1 appears total
-                                    navy = record.decode("utf-8")
-                                    one_gram = navy.split("\t")
-                                    if int(one_gram[1]) >= 1980:
-                                        n1_match = n1_match +int(one_gram[2]) #match count
-                                        n1_volume = n1_volume +int(one_gram[3]) #volume count
-                                for record in z_1gram.search(prefix=word1_capital):  #need to account for capitalization for this as well
-                                    navy = record.decode("utf-8")
-                                    one_gram = navy.split("\t")
-                                    if int(one_gram[1]) >= 1980:
-                                        n1_match = n1_match +int(one_gram[2]) #match count
-                                        n1_volume = n1_volume +int(one_gram[3]) #volume count
-
-                                onegram_memory[word1] = n1_match, n1_volume
+                                print("Warning, " + word1 + " Not in Onegram Corpus!")
+                                continue
                                 
 
                             if word2 not in onegram_memory:
-                                n2_count_one = 0
-                                n2_count_two = 0
-                                word2_capital = word2.capitalize()                                
-                                word2_encoded = word2.encode('utf-8')
-                                word2_capital = word2_capital.encode('utf-8')
-
-                                for record in z_1gram.search(prefix=word2_encoded): #number of times word1 appears total
-                                    ship = record.decode("utf-8")
-                                    n2_gram = ship.split("\t")
-                                    if int(n2_gram[1]) >= 1980:
-                                        n2_match = n2_match +int(n2_gram[2]) #match count
-                                        n2_volume = n2_volume +int(n2_gram[3]) #volume count
-                                for record in z_1gram.search(prefix=word2_capital):  #need to account for capitalization for this as well
-                                    ship = record.decode("utf-8")
-                                    n2_gram = ship.split("\t")
-                                    if int(n2_gram[1]) >= 1980:
-                                        n2_match = n2_match +int(n2_gram[2]) #match count
-                                        n2_volume = n2_volume +int(n2_gram[3]) #volume count
-
-                                onegram_memory[word2] = n2_match, n2_volume
-
-
-                            else:
-                                n1_match = 0
-                                n1_volume = 0
-
-                                word1_capital = word1.capitalize() #search query doesn't let us ignore case, so we have to account for each combination of capital and lowercase in English
-                                word2_capital = word2.capitalize()
                                 
-                                word1_encoded = word1.encode('utf-8')
-                                word2_encoded = word2.encode('utf-8')
-                                word1_capital = word1_capital.encode('utf-8')
-                                word2_capital = word2_capital.encode('utf-8')
+                                print("Warning, " + word2 + " Not in Onegram Corpus!")
+                                continue
 
-                                for record in z_1gram.search(prefix=word1_encoded): #number of times word1 appears total
-                                    navy = record.decode("utf-8")
-                                    one_gram = navy.split("\t")
-                                    if int(one_gram[1]) >= 1980:
-                                        n1_match = n1_match +int(one_gram[2]) #match count
-                                        n1_volume = n1_volume +int(one_gram[3]) #volume count
-                                for record in z_1gram.search(prefix=word1_capital):  #need to account for capitalization for this as well
-                                    navy = record.decode("utf-8")
-                                    one_gram = navy.split("\t")
-                                    if int(one_gram[1]) >= 1980:
-                                        n1_match = n1_match +int(one_gram[2]) #match count
-                                        n1_volume = n1_volume +int(one_gram[3]) #volume count
-
-                                n2_count_one = 0
-                                n2_count_two = 0
-                                for record in z_1gram.search(prefix=word2_encoded): #number of times word1 appears total
-                                    ship = record.decode("utf-8")
-                                    n2_gram = ship.split("\t")
-                                    if int(n2_gram[1]) >= 1980:
-                                        n2_match = n2_match +int(n2_gram[2]) #match count
-                                        n2_volume = n2_volume +int(n2_gram[3]) #volume count
-                                for record in z_1gram.search(prefix=word2_capital):  #need to account for capitalization for this as well
-                                    ship = record.decode("utf-8")
-                                    n2_gram = ship.split("\t")
-                                    if int(n2_gram[1]) >= 1980:
-                                        n2_match = n2_match +int(n2_gram[2]) #match count
-                                        n2_volume = n2_volume +int(n2_gram[3]) #volume count
-
-                                onegram_memory[word1] = n1_match, n1_volume
-                                onegram_memory[word2] = n2_match, n2_volume
-
+                            
+                            n1_match, n1_volume, N1_POS = onegram_memory[word1]
+                            n2_match, n2_volume, N2_POS = onegram_memory[word2]
                             bigram_memory[(word1, word2)] = (output[2], output[3], word1POS, word2POS, n1_match, n1_volume, n2_match, n2_volume) 
 
                                                                   
