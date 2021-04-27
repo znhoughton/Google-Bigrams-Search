@@ -79,29 +79,4 @@ if __name__ == '__main__':
     print("this is log match count odds ratio of: " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(math.log(oddsratio_col1))) #"log" it to get a more manageable number
     print("this is log volume count odds ratio of " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(math.log(oddsratio_col2))) # ^
 
-#apple juice
-#apple pie
-#orange juice
-#internet troll
-#tuna sandwich
-#game console
-#video game
-#living room
-#living cost
-#honey pot
-#ice cream
-#fan fiction
-#camping car
-#bowling alley
-#bowling pin
-#toilet paper
-#paper towel
-#picture frame
-
-
-#read file --> run the calculations on all the phrases
-#write 
-#pandas library
-
-#
 
