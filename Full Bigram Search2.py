@@ -30,8 +30,8 @@ if __name__ == '__main__':
 
                     one_gram_string = item.decode('utf-8')
                     one_gram_output = one_gram_string.split('\t')
-                    one_gram_match_count = one_gram_output[2]
-                    one_gram_volume_count = one_gram_output[3]
+                    one_gram_match_count = int(one_gram_output[2])
+                    one_gram_volume_count = int(one_gram_output[3])
                     word = one_gram_output[0]
                     word = word.lower()
                     
@@ -62,9 +62,9 @@ if __name__ == '__main__':
                 for i, item in enumerate (z.search()):
                     decoded_string = item.decode('utf-8')
                     output = decoded_string.split('\t')
-                    match_count = output[2]
-                    volume_count = output[3]
-                    year = output[1]
+                    match_count = int(output[2])
+                    volume_count = int(output[3])
+                    year = int(output[1])
                     bigram = output[0].split(' ')
                     if i % 10000000 == 0:
                         print(decoded_string)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
                             print(word1 + " " + word2)
                         if (word1, word2) in bigram_memory:
                             old_output2, old_output3, old_POS1, old_POS2, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3 = bigram_memory[(word1, word2)]
-                            bigram_memory[(word1, word2)] = (old_output2 + output[2], old_output3 + output[3], word1POS, word2POS, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3)
+                            bigram_memory[(word1, word2)] = (old_output2 + int(output[2]), old_output3 + int(output[3]), word1POS, word2POS, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3)
                         
                             
                         else:
@@ -107,7 +107,7 @@ if __name__ == '__main__':
                             
                             n1_match, n1_volume, N1_POS = onegram_memory[word1]
                             n2_match, n2_volume, N2_POS = onegram_memory[word2]
-                            bigram_memory[(word1, word2)] = (output[2], output[3], word1POS, word2POS, n1_match, n1_volume, n2_match, n2_volume) 
+                            bigram_memory[(word1, word2)] = (int(output[2]), int(output[3]), word1POS, word2POS, int(n1_match), int(n1_volume), int(n2_match), int(n2_volume)) 
                                            
                 for word1, word2 in bigram_memory:
                     
