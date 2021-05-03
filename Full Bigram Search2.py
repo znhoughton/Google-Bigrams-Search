@@ -11,18 +11,20 @@ if __name__ == '__main__':
     import math
     import csv
     import json  
-
+    import io
 
 
     z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs")
     z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs")
 
     if __name__ == '__main__':
-        with open('D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\csvtest.csv', newline='') as csvfile_input:
-            with open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w') as csvfile_output:
+        with io.open('G:\Google NGRAMS Corpus\onegram.csv', 'w', encoding = 'utf-8') as csvfile_output2:
+            with io.open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w', encoding = 'utf-8') as csvfile_output:
                 bigram_writer = csv.writer(csvfile_output, delimiter=',', lineterminator='\n')
                 bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N2 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
-                
+                one_gram_writer = csv.writer(csvfile_output2, delimiter = ',', lineterminator = '\n')
+                one_gram_writer.writerow(["Word", "POS", "Match Count", "Volume Count", "Corpus Size"])
+
                 corpus_size = 0
                 onegram_memory = {}
                 bigram_memory = {}
@@ -58,6 +60,10 @@ if __name__ == '__main__':
                             onegram_memory[word] = old_n1_match + one_gram_match_count, old_n1_volume + one_gram_volume_count, POS
                         else:
                             onegram_memory[word] = one_gram_match_count, one_gram_volume_count, POS   
+                for word in onegram_memory:
+                    Match_Count, Volume_Count, POS = onegram_memory[word]
+                    one_gram_writer.writerow([word, POS, Match_Count, Volume_Count, corpus_size])
+                
 
                 for i, item in enumerate (z.search()):
                     decoded_string = item.decode('utf-8')
@@ -108,15 +114,16 @@ if __name__ == '__main__':
                             n1_match, n1_volume, N1_POS = onegram_memory[word1]
                             n2_match, n2_volume, N2_POS = onegram_memory[word2]
                             bigram_memory[(word1, word2)] = (int(output[2]), int(output[3]), word1POS, word2POS, int(n1_match), int(n1_volume), int(n2_match), int(n2_volume)) 
-                                           
+
+                                          
                 for word1, word2 in bigram_memory:
                     
                     bigram_match, bigram_volume, word1POS, word2POS, N1_match, N1_volume, N2_match, N2_volume = bigram_memory[(word1, word2)]
                     
                     odds_ratio_match = (bigram_match) / (N1_match - bigram_match)
                     odds_ratio_volume = (bigram_volume) / (N1_volume - bigram_volume)
-                    deltap_match = (bigram_match / N1_match) - ((N2_match - bigram) / (corpus_size - N1_match))
-                    deltap_volume = (bigram_volume / N1_volume) - ((N2_volume - bigram) / (corpus_size - N1_volume))
+                    deltap_match = (bigram_match / N1_match) - ((N2_match - bigram_match) / (corpus_size - N1_match))
+                    deltap_volume = (bigram_volume / N1_volume) - ((N2_volume - bigram_volume) / (corpus_size - N1_volume))
                     oddsratio_deltap_difference_match = abs(odds_ratio_match - deltap_match)
                     oddsratio_deltap_difference_volume = abs(odds_ratio_volume - deltap_volume)
 
