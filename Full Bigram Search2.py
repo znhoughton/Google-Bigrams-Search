@@ -1,6 +1,8 @@
+#python 2.7.16
 #important preface, if the instructions on the ZS library page don't work, try the following:
 #download the wheel from https://www.lfd.uci.edu/~gohlke/pythonlibs/#zs for whichever version of windows you have
 #then use pip install "file location of the wheel without the quotes"
+#zs requires python 2
 
 ###POS Unspecified was used for the staub replication
 ###huge thanks to Lily Houghton and Mariana Dematte for helping me optimize this and troubleshoot
@@ -21,9 +23,9 @@ if __name__ == '__main__':
         with io.open('G:\Google NGRAMS Corpus\Bigrams Only.csv', 'w', encoding = 'utf-8') as csvfile_output2:
             with io.open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w', encoding = 'utf-8') as csvfile_output:
                 bigram_writer = csv.writer(csvfile_output, delimiter=',', lineterminator='\n')
-                bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N2 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
+                bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N1 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
                 bigram_only_writer = csv.writer(csvfile_output2, delimiter = ',', lineterminator = '\n')
-                bigram_only_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N2 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count"])
+                bigram_only_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N1 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count"])
                         
                 corpus_size = 0
                 onegram_memory = {}
