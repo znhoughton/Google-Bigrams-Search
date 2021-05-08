@@ -1,6 +1,6 @@
 # Google-Bigrams-Search
 
-Special thanks to Lily Houghton and Mariana Dematte for their invaluable help in optimizing these scripts.
+Special thanks to Lily Houghton and Mariana Dematte for their invaluable help in optimizing these scripts so they don't take 5 years to run.
 
 Please note that these scripts are designed to work on Python 2.7.16 (as the ZS package is not compatible with Python 3.0 and above). 
 
