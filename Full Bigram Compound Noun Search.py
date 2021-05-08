@@ -5,6 +5,8 @@
 ###POS Unspecified was used for the staub replication
 ###huge thanks to Lily Houghton and Mariana Dematte for helping me optimize this and troubleshoot
 
+###runtime ~24 hours
+
 if __name__ == '__main__':
 
     from zs import ZS
