@@ -1,8 +1,10 @@
 # Google-Bigrams-Search
 
-Special thanks to Lily Houghton and Mariana Dematte for their invaluable help in optimizing these scripts
+Special thanks to Lily Houghton and Mariana Dematte for their invaluable help in optimizing these scripts.
 
-The various python scripts in this repository are designed to make corpus research a lot easier. Specifically, these scripts are designed for searching the google ngrams corpus. The scripts rely on the Python package "ZS," details about installing it can be found at the top of each script.
+Please note that these scripts are designed to work on Python 2.7.16 (as the ZS package is not compatible with Python 3.0 and above). 
+
+The various python scripts in this repository are designed to make corpus research a lot easier, specifically for searching the google ngrams corpus. The scripts rely on the Python package "ZS," details about installing it can be found at the top of each script.
 
 A short summary describing each program is included below:
 
@@ -20,3 +22,6 @@ A short summary describing each program is included below:
 **Full Bigram Search2**
 
    This program searches the entire google corpus (1gram and 2gram) in order to calculate odds ratio and deltaP for each bigram.
+
+If you use this program for scientific research, please cite the following papers:
+
