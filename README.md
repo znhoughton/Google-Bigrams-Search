@@ -22,6 +22,25 @@ A short summary describing each program is included below:
 **Full Bigram Search2**
 
    This program searches the entire google corpus (1gram and 2gram) in order to calculate odds ratio and deltaP for each bigram. Note that it takes ~30 hours for the program to complete on my computer with 32gb of RAM and may take longer or shorter depending on your computer.
+   
+**Full Bigram Compound Noun Search**
 
-If you use this program for scientific research, please cite the following papers:
+   This program is pretty much the same as the Full Bigram Search but is restricted to compound nouns.
+   
+**Acknowledgements**
+
+Again, a huge shout out to Lily Houghton and Mariana Dematte.
+
+Additionally, if you use any of these programs for scientific research, please cite the following papers:
+
+The paper on ZS: 
+
+Smith, N. J. (2014). ZS: A file format for efficiently distributing, using, and archiving record-oriented data sets of any size. *Manuscript submitted for publication. School of Informatics, University of Edinburgh. Retrieved from http://vorpus.org/papers/draft/zs-paper.pdf.*
+
+My paper employing these scripts:
+
+
+
+
+
 
