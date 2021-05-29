@@ -21,7 +21,7 @@ A short summary describing each program is included below:
     
 **Full Bigram Search2**
 
-   This program searches the entire google corpus (1gram and 2gram) in order to calculate odds ratio and deltaP for each bigram.
+   This program searches the entire google corpus (1gram and 2gram) in order to calculate odds ratio and deltaP for each bigram. Note that it takes ~30 hours for the program to complete on my computer with 32gb of RAM and may take longer or shorter depending on your computer.
 
 If you use this program for scientific research, please cite the following papers:
 
