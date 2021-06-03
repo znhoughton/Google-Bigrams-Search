@@ -16,11 +16,11 @@ if __name__ == '__main__':
     import io
 
 
-    z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs")
-    z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs")
+    z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs") #open bigrams corpus
+    z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs") #open 1gram corpus
 
     if __name__ == '__main__':
-        with io.open('G:\Google NGRAMS Corpus\onegram.csv', 'w', encoding = 'utf-8') as csvfile_output2:
+        with io.open('G:\Google NGRAMS Corpus\onegram.csv', 'w', encoding = 'utf-8') as csvfile_output2: 
             with io.open('G:\Google NGRAMS Corpus\Full Bigram Compound Nouns Only.csv', 'w', encoding = 'utf-8') as csvfile_output:
                 bigram_writer = csv.writer(csvfile_output, delimiter=',', lineterminator='\n')
                 bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N1 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
@@ -42,7 +42,7 @@ if __name__ == '__main__':
                     
 
                     if i % 10000000 == 0:
-                        print(one_gram_string)
+                        print(one_gram_string) #keep an eye on the progress of the program
                         print(len(onegram_memory))
 
                     if len(word.split('_')) == 2:
@@ -51,31 +51,31 @@ if __name__ == '__main__':
                     else:
                         word = word
 
-                    if word.isalpha() and POS == "noun" and one_gram_year > 1960:
-                        corpus_size = corpus_size + int(one_gram_match_count) #corpus size is a summation of all the match counts of all the words
+                    if word.isalpha() and POS == "noun" and one_gram_year > 1960: #restrict the year
+                        corpus_size = corpus_size + int(one_gram_match_count) #corpus size is a summation of all the match counts of all the nouns
                         if i % 1000000 == 0:
-                            print(word)
+                            print(word) #keep an eye on the progress of the program
                             print(POS)
                             print(corpus_size)
                         
                         if word in onegram_memory:
-                            old_n1_match, old_n1_volume, old_POS = onegram_memory[word]
+                            old_n1_match, old_n1_volume, old_POS = onegram_memory[word] #keep track of counts of words we have come across before
                             onegram_memory[word] = old_n1_match + one_gram_match_count, old_n1_volume + one_gram_volume_count, POS
                         else:
-                            onegram_memory[word] = one_gram_match_count, one_gram_volume_count, POS   
+                            onegram_memory[word] = one_gram_match_count, one_gram_volume_count, POS  #keep track of counts of words we haven't come across before
                 for word in onegram_memory:
                     Match_Count, Volume_Count, POS = onegram_memory[word]
                     one_gram_writer.writerow([word, POS, Match_Count, Volume_Count, corpus_size])
                 
 
                 for i, item in enumerate (z.search()):
-                    decoded_string = item.decode('utf-8')
+                    decoded_string = item.decode('utf-8') #decode string
                     output = decoded_string.split('\t')
-                    match_count = int(output[2])
+                    match_count = int(output[2]) 
                     volume_count = int(output[3])
                     year = int(output[1])
                     bigram = output[0].split(' ')
-                    if i % 10000000 == 0:
+                    if i % 10000000 == 0: #keep track of program progress
                         print(decoded_string)
                         print(bigram)
                         print(len(bigram_memory))
@@ -119,7 +119,7 @@ if __name__ == '__main__':
                             bigram_memory[(word1, word2)] = (int(output[2]), int(output[3]), word1POS, word2POS, int(n1_match), int(n1_volume), int(n2_match), int(n2_volume)) 
 
                                           
-                for word1, word2 in bigram_memory:
+                for word1, word2 in bigram_memory: #write the bigram memory into a csv
                     
                     bigram_match, bigram_volume, word1POS, word2POS, N1_match, N1_volume, N2_match, N2_volume = bigram_memory[(word1, word2)]
                     
