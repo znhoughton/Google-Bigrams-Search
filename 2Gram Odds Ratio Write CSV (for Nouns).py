@@ -11,38 +11,38 @@ import csv
 def two_gram_odds_ratio(word1, word2):
     
     if __name__ == '__main__':
-        z = ZS("D:\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-2gram.zs")
-        z_1gram = ZS("D:\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-1gram.zs")
+        z = ZS("D:\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-2gram.zs") #open bigrams corpus
+        z_1gram = ZS("D:\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-1gram.zs") #open 1gram corpus
        
         
         word1_capital = word1.capitalize() #search query doesn't let us ignore case, so we have to account for each combination of capital and lowercase in English
         word2_capital = word2.capitalize()
-        word1 = word1.encode("utf-8")
+        word1 = word1.encode("utf-8") #encode string for searching
         word2 = word2.encode("utf-8")
-        word1_capital = word1_capital.encode("utf-8")
+        word1_capital = word1_capital.encode("utf-8") 
         word2_capital = word2_capital.encode("utf-8")
         two_gram_one = 0
         two_gram_two = 0
         for record in z.search(start=word1 + b"_NOUN " + word2 + b"_NOUN\t1980", stop=word1 + b"_NOUN " + word2 + b"_NOUN\t2009"): #search for each 2gram between 1980 and 2009
-            navy_ship = record.decode("utf-8")
+            navy_ship = record.decode("utf-8") #decode string
             n_gram = navy_ship.split("\t")#separate the string so we can focus on what we care about 
             two_gram_one = two_gram_one + int(n_gram[2]) #column 3 gives us "match count"
             two_gram_two = two_gram_two + int(n_gram[3]) #column 4 gives us "volume count"
         for record in z.search(start=word1_capital + b"_NOUN " + word2_capital + b"_NOUN\t1980", stop=word1_capital + b"_NOUN " + word2_capital + b"_NOUN\t2009"): #accounting for capitalization
             navy_ship = record.decode("utf-8")
             n_gram = navy_ship.split("\t")   
-            two_gram_one = two_gram_one + int(n_gram[2])
-            two_gram_two = two_gram_two + int(n_gram[3])
+            two_gram_one = two_gram_one + int(n_gram[2]) #match count
+            two_gram_two = two_gram_two + int(n_gram[3]) #volume count
         for record in z.search(start=word1_capital + b"_NOUN " + word2 + b"_NOUN\t1980", stop=word1_capital + b"_NOUN " + word2 + b"_NOUN\t2009"): #accounting for capitalization
             navy_ship = record.decode("utf-8")
             n_gram = navy_ship.split("\t")   
-            two_gram_one = two_gram_one + int(n_gram[2])
-            two_gram_two = two_gram_two + int(n_gram[3])
+            two_gram_one = two_gram_one + int(n_gram[2]) #match count
+            two_gram_two = two_gram_two + int(n_gram[3]) #volume count
         for record in z.search(start=word1 + b"_NOUN " + word2_capital + b"_NOUN\t1980", stop=word1 + b"_NOUN " + word2_capital + b"_NOUN\t2009"): #accounting for capitalization
             navy_ship = record.decode("utf-8")
             n_gram = navy_ship.split("\t")   
-            two_gram_one = two_gram_one + int(n_gram[2])
-            two_gram_two = two_gram_two + int(n_gram[3])
+            two_gram_one = two_gram_one + int(n_gram[2]) #match count
+            two_gram_two = two_gram_two + int(n_gram[3]) #volume count
        
         one_gram_one = 0
         one_gram_two = 0
