@@ -6,8 +6,8 @@ from zs import ZS
 import math
 
 if __name__ == '__main__':
-    z = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-2gram.zs")
-    z_1gram = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-1gram.zs")
+    z = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-2gram.zs") #load in the bigram corpus
+    z_1gram = ZS("D:\PhD Stuff\Linguistics Stuff\Google NGRAMS\google-books-eng-us-all-20120701-1gram.zs") #load in the 1gram corpus
 
 
     print("please type the first word of your compound noun in all lowercase: ")
@@ -25,24 +25,24 @@ if __name__ == '__main__':
     two_gram_two = 0
     for record in z.search(start=word1 + b"_NOUN " + word2 + b"_NOUN\t1980", stop=word1 + b"_NOUN " + word2 + b"_NOUN\t2009"): #search for each 2gram between 1980 and 2009
         navy_ship = record.decode("utf-8")
-        n_gram = navy_ship.split("\t")#separate the string so we can focus on what we care about 
+        n_gram = navy_ship.split("\t") #separate the string so we can focus on what we care about 
         two_gram_one = two_gram_one + int(n_gram[2]) #column 3 gives us "match count"
         two_gram_two = two_gram_two + int(n_gram[3]) #column 4 gives us "volume count"
     for record in z.search(start=word1_capital + b"_NOUN " + word2_capital + b"_NOUN\t1980", stop=word1_capital + b"_NOUN " + word2_capital + b"_NOUN\t2009"): #accounting for capitalization
         navy_ship = record.decode("utf-8")
         n_gram = navy_ship.split("\t")   
-        two_gram_one = two_gram_one + int(n_gram[2])
-        two_gram_two = two_gram_two + int(n_gram[3])
+        two_gram_one = two_gram_one + int(n_gram[2]) #column 3 gives us "match count"
+        two_gram_two = two_gram_two + int(n_gram[3]) #column 4 gives us "volume count"
     for record in z.search(start=word1_capital + b"_NOUN " + word2 + b"_NOUN\t1980", stop=word1_capital + b"_NOUN " + word2 + b"_NOUN\t2009"): #accounting for capitalization
         navy_ship = record.decode("utf-8")
         n_gram = navy_ship.split("\t")   
-        two_gram_one = two_gram_one + int(n_gram[2])
-        two_gram_two = two_gram_two + int(n_gram[3])
+        two_gram_one = two_gram_one + int(n_gram[2]) #column 3 gives us "match count"
+        two_gram_two = two_gram_two + int(n_gram[3]) #column 4 gives us "volume count"
     for record in z.search(start=word1 + b"_NOUN " + word2_capital + b"_NOUN\t1980", stop=word1 + b"_NOUN " + word2_capital + b"_NOUN\t2009"): #accounting for capitalization
         navy_ship = record.decode("utf-8")
         n_gram = navy_ship.split("\t")   
-        two_gram_one = two_gram_one + int(n_gram[2])
-        two_gram_two = two_gram_two + int(n_gram[3])
+        two_gram_one = two_gram_one + int(n_gram[2]) #column 3 gives us "match count"
+        two_gram_two = two_gram_two + int(n_gram[3]) #column 4 gives us "volume count"
     print("This is the match count of " + str(word1.decode('utf-8')) + " " +str(word2.decode('utf-8')) + ": " + str(two_gram_one)) #total sum of match count (total number)
     print("This is the volume count of " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(two_gram_two)) #total sum of volume count (number of different environments)
 
@@ -67,13 +67,13 @@ if __name__ == '__main__':
     
     
     P_value = (two_gram_one / one_gram_one)
-    oddsratio_col1 = (two_gram_one / one_gram_one) / ((one_gram_one - two_gram_one) / one_gram_one)
-    oddsratio_col2 = (two_gram_two / one_gram_two) / ((one_gram_two - two_gram_two) / one_gram_two)
+    oddsratio_col1 = (two_gram_one / one_gram_one) / ((one_gram_one - two_gram_one) / one_gram_one) #calculate the odds ratio of the match count
+    oddsratio_col2 = (two_gram_two / one_gram_two) / ((one_gram_two - two_gram_two) / one_gram_two) #calculate the odds ratio of the volume count
     print("this is our P value of " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(P_value))
     
     print("this is the match count odds ratio of " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(oddsratio_col1)) #match count odds ratio
     print("this is the volume count odds ratio of " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(oddsratio_col2)) #volume count odds ratio
-  #this allows us to get an idea of how predictive word1 is of word 2
+  #this allows us to get an idea of how predictive word1 is of word2
   #in other words, what are the odds of word2 given word1?
     
     print("this is log match count odds ratio of: " + str(word1.decode('utf-8')) + " " + str(word2.decode('utf-8')) + ": " + str(math.log(oddsratio_col1))) #"log" it to get a more manageable number
