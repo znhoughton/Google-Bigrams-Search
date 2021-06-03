@@ -17,9 +17,9 @@ if __name__ == '__main__':
     import json  
     import io
 
-
-    z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs")
-    z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs")
+ 
+    z = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-2gram.zs") #load in the bigram corpus
+    z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs") #load in the 1gram corpus
 
     if __name__ == '__main__':
         with io.open('G:\Google NGRAMS Corpus\Bigrams Only.csv', 'w', encoding = 'utf-8') as csvfile_output2:
