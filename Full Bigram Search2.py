@@ -22,91 +22,91 @@ if __name__ == '__main__':
     z_1gram = ZS("G:\Google NGRAMS Corpus\google-books-eng-us-all-20120701-1gram.zs") #load in the 1gram corpus
 
     if __name__ == '__main__':
-        with io.open('G:\Google NGRAMS Corpus\Bigrams Only.csv', 'w', encoding = 'utf-8') as csvfile_output2:
-            with io.open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w', encoding = 'utf-8') as csvfile_output:
+        with io.open('G:\Google NGRAMS Corpus\Bigrams Only.csv', 'w', encoding = 'utf-8') as csvfile_output2: #just bigrams
+            with io.open('G:\Google NGRAMS Corpus\Full Bigram.csv', 'w', encoding = 'utf-8') as csvfile_output: #bigrams plus odds ratio, deltaP, etc
                 bigram_writer = csv.writer(csvfile_output, delimiter=',', lineterminator='\n')
                 bigram_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N1 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count", "Odds Ratio of Match count", "Odds Ratio of Volume Count", "Delta P of Match Count", "Delta P of Volume Count", "Difference Between Odds Ratio and DeltaP Match Count", "Difference Between Odds Ratio and DeltaP Volume Count", "Corpus Size"])
                 bigram_only_writer = csv.writer(csvfile_output2, delimiter = ',', lineterminator = '\n')
                 bigram_only_writer.writerow(["N1", "N2", "N1POS", "N2POS", "N1 Match Count", "N1 Volume Count", "N2 Match Count", "N2 Volume Count", "Bigram Match Count", "Bigram Volume Count"])
                         
                 corpus_size = 0
-                onegram_memory = {}
-                bigram_memory = {}
-                for i, item in enumerate (z_1gram.search()):
+                onegram_memory = {} #create a dictionary with all of the onegram information (words, match counts, etc)
+                bigram_memory = {} #create a dictionary with all of the bigram information (words, match counts, etc)
+                for i, item in enumerate (z_1gram.search()): #for every item in the one gram corpus:
 
-                    one_gram_string = item.decode('utf-8')
-                    one_gram_output = one_gram_string.split('\t')
-                    one_gram_match_count = int(one_gram_output[2])
-                    one_gram_volume_count = int(one_gram_output[3])
-                    word = one_gram_output[0]
-                    word = word.lower()
+                    one_gram_string = item.decode('utf-8') #decode string
+                    one_gram_output = one_gram_string.split('\t') #split string by tab 
+                    one_gram_match_count = int(one_gram_output[2]) #3rd column is match count
+                    one_gram_volume_count = int(one_gram_output[3]) #4th column is volume count
+                    word = one_gram_output[0] #first column is the word
+                    word = word.lower() #account for case
                     
 
-                    if i % 10000000 == 0:
+                    if i % 10000000 == 0: #this was included for debugging purposes, can be removed if you want
                         print(one_gram_string)
                         print(word)
                         print(len(onegram_memory))
 
-                    if len(word.split('_')) == 2:
+                    if len(word.split('_')) == 2: #split the word if it has POS information (not all of them have POS tagged)
                         word, POS = word.split('_')
 
                     else:
                         word = word
 
-                    if word.isalpha():
+                    if word.isalpha(): #ignore non-words
                         corpus_size = corpus_size + int(one_gram_match_count) #corpus size is a summation of all the match counts of all the words
                         if i % 1000000 == 0:
                             print(word)
                             print(corpus_size)
                         
-                        if word in onegram_memory:
+                        if word in onegram_memory: #if the word is already in our memory, update the dictionary count, if it's not, create an entry for it.
                             old_n1_match, old_n1_volume, old_POS = onegram_memory[word]
                             onegram_memory[word] = old_n1_match + one_gram_match_count, old_n1_volume + one_gram_volume_count, POS
                         else:
                             onegram_memory[word] = one_gram_match_count, one_gram_volume_count, POS   
                 
 
-                for i, item in enumerate (z.search()):
-                    decoded_string = item.decode('utf-8')
-                    output = decoded_string.split('\t')
-                    match_count = int(output[2])
-                    volume_count = int(output[3])
-                    year = int(output[1])
-                    bigram = output[0].split(' ')
-                    if i % 10000000 == 0:
+                for i, item in enumerate (z.search()): #for items in the bigram corpus
+                    decoded_string = item.decode('utf-8') #decod string
+                    output = decoded_string.split('\t') #split string 
+                    match_count = int(output[2]) #3rd column is match count
+                    volume_count = int(output[3]) #4th column is the volume count
+                    year = int(output[1]) #2nd column is the year
+                    bigram = output[0].split(' ') #first column is the bigram
+                    if i % 10000000 == 0: #this was included for debugging purposes
                         print(decoded_string)
                         print(bigram)
                         print(len(bigram_memory))
                     
-                    if len(bigram[0].split('_')) == 2:
+                    if len(bigram[0].split('_')) == 2: #not all bigrams contain POS information, but for those that do, split
                         word1, word1POS = bigram[0].split('_')
                     else:
-                        word1 = bigram[0]
+                        word1 = bigram[0] #first word in the bigram
                         word1POS = None
                     if len(bigram[1].split('_')) == 2:
                         word2, word2POS = bigram[1].split('_')
                     else:
-                        word2 = bigram[1]
+                        word2 = bigram[1] #second word in the bigram
                         word2POS = None
                     word1 = word1.lower()
                     word2 = word2.lower()
 
                     if word1.isalpha() and word2.isalpha():
-                        if i % 1000000 == 0:
+                        if i % 1000000 == 0: #debugging purposes
                             print(word1 + " " + word2)
-                        if (word1, word2) in bigram_memory:
+                        if (word1, word2) in bigram_memory: #if bigram is already in our memory, update the entry
                             old_output2, old_output3, old_POS1, old_POS2, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3 = bigram_memory[(word1, word2)]
                             bigram_memory[(word1, word2)] = (old_output2 + int(output[2]), old_output3 + int(output[3]), word1POS, word2POS, old_one_gram2, old_one_gram3, old_n2_count2, old_n2_count3)
                         
                             
-                        else:
+                        else: #if first word in the bigram is not in our memory, check to see if it's in the 1gram memory, if not print a warning and continue.
                             if word1 not in onegram_memory:
 
                                 print("Warning, " + word1 + " Not in Onegram Corpus!")
                                 continue
                                 
 
-                            if word2 not in onegram_memory:
+                            if word2 not in onegram_memory: #same as above but for the second word in the bigram
                                 
                                 print("Warning, " + word2 + " Not in Onegram Corpus!")
                                 continue
@@ -117,7 +117,7 @@ if __name__ == '__main__':
                             bigram_memory[(word1, word2)] = (int(output[2]), int(output[3]), word1POS, word2POS, int(n1_match), int(n1_volume), int(n2_match), int(n2_volume)) 
 
 
-                for word1, word2 in bigram_memory:
+                for word1, word2 in bigram_memory: #write into the csv bigram information
                     bigram_match, bigram_volume, word1POS, word2POS, N1_match, N1_volume, N2_match, N2_volume = bigram_memory[(word1, word2)]
                     bigram_only_writer.writerow([word1, word2, word1POS, word2POS, N1_match, N1_volume, N2_match, N2_volume, bigram_match, bigram_volume])
 
@@ -126,14 +126,14 @@ if __name__ == '__main__':
                     bigram_match, bigram_volume, word1POS, word2POS, N1_match, N1_volume, N2_match, N2_volume = bigram_memory[(word1, word2)]
                     
                     if N1_match != 0 and bigram_match != 0 and N1_match - bigram_match != 0:
-                        odds_ratio_match = (bigram_match) / (N1_match - bigram_match)
-                        deltap_match = (bigram_match / N1_match) - ((N2_match - bigram_match) / (corpus_size - N1_match))
+                        odds_ratio_match = (bigram_match) / (N1_match - bigram_match) #odds ratio calculations for match count
+                        deltap_match = (bigram_match / N1_match) - ((N2_match - bigram_match) / (corpus_size - N1_match)) #delta P calculations for match count
                     else: 
                         odds_ratio_match = "NA"
                         deltap_match = "NA"
-                    if N1_volume != 0 and bigram_volume != 0 and N1_volume - bigram_volume != 0:
-                        odds_ratio_volume = (bigram_volume) / (N1_volume - bigram_volume)
-                        deltap_volume = (bigram_volume / N1_volume) - ((N2_volume - bigram_volume) / (corpus_size - N1_volume))
+                    if N1_volume != 0 and bigram_volume != 0 and N1_volume - bigram_volume != 0: #can't divide by 0
+                        odds_ratio_volume = (bigram_volume) / (N1_volume - bigram_volume) #odds ratio calculations for volume count
+                        deltap_volume = (bigram_volume / N1_volume) - ((N2_volume - bigram_volume) / (corpus_size - N1_volume)) #delta P calculations for volume count
                     else:
                         odds_ratio_volume = "NA"
                         deltap_volume = "NA"
