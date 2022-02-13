@@ -105,8 +105,8 @@ if __name__ == '__main__':
                 oddsratio_col2 = (two_gram_two / one_gram_two) / ((one_gram_two - two_gram_two) / one_gram_two)
                 deltaP_col1 = (two_gram_one / one_gram_one) - ((n2_count_one - two_gram_one) / (corpus_size - one_gram_one))
                 deltaP_col2 = (two_gram_two / one_gram_two) - ((n2_count_two - n2_count_two) / (corpus_size - one_gram_two))
-                oddsratio_simplified1 = (two_gram_one / one_gram_one)
-                oddsratio_simplified2 = (two_gram_two / one_gram_two)
+                oddsratio_simplified1 = (two_gram_one / (two_gram_one - one_gram_one)) #simplified version of odds ratio
+                oddsratio_simplified2 = (two_gram_two / (two_gram_two - one_gram_two))
                 oddsratio_deltap_difference1 = oddsratio_col1 = deltaP_col1 #this is included so we can find words with the maximum difference between deltaP and oddsratio
                 oddsratio_deltap_difference2 = oddsratio_col2 = deltaP_col2
             
